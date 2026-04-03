@@ -1,2 +1,955 @@
 # github.io
 TRANSFORMAÇÃO OPERACIONAL COM AGENTES DE IA
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta de Agentes de IA — AuraBrasil</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c14;
+    --surface: #0e1520;
+    --surface2: #141c2a;
+    --surface3: #1a2336;
+    --gold: #e8b84b;
+    --gold-light: #f5d07a;
+    --gold-dim: rgba(232,184,75,0.12);
+    --blue: #3b82f6;
+    --blue-dim: rgba(59,130,246,0.12);
+    --teal: #14b8a6;
+    --teal-dim: rgba(20,184,166,0.12);
+    --text: #e8eaf0;
+    --text-muted: #8892a4;
+    --border: rgba(232,184,75,0.18);
+    --border2: rgba(255,255,255,0.07);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0; opacity:0.5;
+  }
+
+  /* ─── LAYOUT ─── */
+  .page { max-width: 960px; margin: 0 auto; padding: 0 24px; position:relative; z-index:1; }
+
+  h1,h2,h3,h4 { font-family:'Syne', sans-serif; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: 80px 24px 60px;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse 80% 60% at 60% 30%, rgba(232,184,75,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 10% 80%, rgba(59,130,246,0.06) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position:absolute; inset:0;
+    background-image: linear-gradient(rgba(232,184,75,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(232,184,75,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+  }
+
+  .badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background: var(--gold-dim); border: 1px solid var(--border);
+    color: var(--gold); font-size: 11px; font-weight:600; letter-spacing:0.12em;
+    text-transform:uppercase; padding: 6px 14px; border-radius:100px;
+    margin-bottom: 28px;
+  }
+
+  .badge-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+  .hero-inner { max-width:960px; margin:0 auto; position:relative; z-index:1; }
+
+  .hero-label {
+    font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--text-muted); margin-bottom:10px;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 68px);
+    font-weight:800; line-height:1.05;
+    letter-spacing:-0.02em;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em { font-style:normal; color:var(--gold); }
+
+  .hero-sub {
+    font-size:17px; color: var(--text-muted); max-width:560px;
+    font-weight:300; margin-bottom:48px;
+    border-left: 2px solid var(--gold); padding-left:16px;
+  }
+
+  .hero-meta {
+    display:flex; flex-wrap:wrap; gap:32px; align-items:center;
+    padding-top:32px; border-top:1px solid var(--border2);
+  }
+
+  .hero-meta-item { display:flex; flex-direction:column; }
+  .hero-meta-item .label { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); }
+  .hero-meta-item .value { font-family:'Syne', sans-serif; font-size:14px; font-weight:700; color:var(--text); }
+
+  /* ─── SECTION ─── */
+  section { padding: 80px 0; }
+
+  .section-header { margin-bottom: 48px; }
+  .section-tag {
+    font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+    color: var(--gold); font-weight:600; margin-bottom:12px;
+  }
+  .section-header h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight:800; letter-spacing:-0.02em; line-height:1.1;
+  }
+  .section-header p { color:var(--text-muted); max-width:560px; margin-top:12px; font-size:15px; }
+
+  /* ─── COMPANY PANEL ─── */
+  .company-panel {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius:16px; overflow:hidden;
+    margin-bottom: 32px;
+  }
+
+  .company-header {
+    padding:24px 28px;
+    background: linear-gradient(135deg, rgba(232,184,75,0.08) 0%, transparent 60%);
+    border-bottom:1px solid var(--border2);
+    display:flex; align-items:center; gap:16px;
+  }
+
+  .company-logo-box {
+    width:52px; height:52px; border-radius:12px;
+    background: var(--gold-dim); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne', sans-serif; font-weight:800; color:var(--gold); font-size:18px;
+    flex-shrink:0;
+  }
+
+  .company-header h3 { font-size:22px; font-weight:800; }
+  .company-header p { color:var(--text-muted); font-size:13px; margin-top:2px; }
+
+  .stats-grid {
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:0;
+  }
+
+  .stat-cell {
+    padding:20px 28px;
+    border-right:1px solid var(--border2);
+    border-bottom:1px solid var(--border2);
+  }
+  .stat-cell:nth-child(4n) { border-right:0; }
+  @media(max-width:600px){.stat-cell{border-right:0}}
+
+  .stat-cell .num {
+    font-family:'Syne', sans-serif; font-size:26px; font-weight:800;
+    color:var(--gold); line-height:1;
+    margin-bottom:4px;
+  }
+  .stat-cell .lbl { font-size:12px; color:var(--text-muted); }
+
+  /* ─── DIAGNOSIS ─── */
+  .diag-grid { display:grid; gap:16px; }
+
+  .diag-card {
+    background:var(--surface); border:1px solid var(--border2);
+    border-radius:12px; padding:20px 24px;
+    display:flex; gap:16px; align-items:flex-start;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .diag-card:hover { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.04); }
+
+  .diag-icon {
+    width:40px; height:40px; border-radius:10px;
+    background: rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.2);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0;
+  }
+
+  .diag-card h4 { font-size:14px; font-weight:700; margin-bottom:4px; }
+  .diag-card p { font-size:13px; color:var(--text-muted); }
+  .diag-card .cost {
+    margin-top:8px; font-size:13px; font-weight:600;
+    color:#ef4444; background:rgba(239,68,68,0.08);
+    display:inline-block; padding:3px 10px; border-radius:6px;
+  }
+
+  /* ─── AGENTS ─── */
+  .agents-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media(max-width:640px){ .agents-grid{ grid-template-columns:1fr; } }
+
+  .agent-card {
+    background:var(--surface);
+    border-radius:16px; overflow:hidden;
+    border:1px solid var(--border2);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .agent-card:hover { transform:translateY(-4px); box-shadow:0 24px 60px rgba(0,0,0,0.4); }
+
+  .agent-card.gold { border-color:rgba(232,184,75,0.3); }
+  .agent-card.blue { border-color:rgba(59,130,246,0.3); }
+
+  .agent-head {
+    padding:24px; position:relative; overflow:hidden;
+  }
+  .agent-card.gold .agent-head { background: linear-gradient(135deg, rgba(232,184,75,0.12) 0%, transparent 60%); }
+  .agent-card.blue .agent-head { background: linear-gradient(135deg, rgba(59,130,246,0.12) 0%, transparent 60%); }
+
+  .agent-num {
+    font-size:11px; letter-spacing:0.16em; text-transform:uppercase; font-weight:700;
+    margin-bottom:12px;
+  }
+  .agent-card.gold .agent-num { color:var(--gold); }
+  .agent-card.blue .agent-num { color:var(--blue); }
+
+  .agent-icon { font-size:36px; margin-bottom:12px; display:block; }
+  .agent-head h3 { font-size:18px; font-weight:800; line-height:1.2; margin-bottom:8px; }
+  .agent-head p { font-size:13px; color:var(--text-muted); }
+
+  .agent-body { padding:24px; }
+
+  .feature-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .feature-list li {
+    display:flex; gap:10px; align-items:flex-start;
+    font-size:13px; color:var(--text-muted);
+  }
+  .feature-list li::before {
+    content:'→'; flex-shrink:0; margin-top:1px;
+  }
+  .agent-card.gold .feature-list li::before { color:var(--gold); }
+  .agent-card.blue .feature-list li::before { color:var(--blue); }
+
+  /* ─── ROI ─── */
+  .roi-section { background: var(--surface); border-radius:20px; overflow:hidden; border:1px solid var(--border2); }
+
+  .roi-header {
+    padding:32px 36px;
+    background: linear-gradient(135deg, rgba(232,184,75,0.06) 0%, transparent 50%);
+    border-bottom:1px solid var(--border2);
+  }
+
+  .roi-cols { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; }
+  @media(max-width:700px){ .roi-cols{grid-template-columns:1fr;} }
+
+  .roi-col { padding:28px 32px; border-right:1px solid var(--border2); }
+  .roi-col:last-child { border-right:0; }
+
+  .roi-col-label {
+    font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    font-weight:700; margin-bottom:20px;
+  }
+  .roi-col.red .roi-col-label { color:#ef4444; }
+  .roi-col.yellow .roi-col-label { color:var(--gold); }
+  .roi-col.green .roi-col-label { color:#22c55e; }
+
+  .roi-item {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:10px 0; border-bottom:1px solid var(--border2); gap:12px;
+  }
+  .roi-item:last-child { border-bottom:0; }
+  .roi-item .name { font-size:12px; color:var(--text-muted); flex:1; }
+  .roi-item .val { font-size:13px; font-weight:700; font-family:'Syne', sans-serif; text-align:right; flex-shrink:0; }
+  .roi-col.red .roi-item .val { color:#ef4444; }
+  .roi-col.yellow .roi-item .val { color:var(--gold); }
+  .roi-col.green .roi-item .val { color:#22c55e; }
+
+  .roi-total {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 0 0; margin-top:8px;
+  }
+  .roi-total .label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; }
+  .roi-total .amount {
+    font-family:'Syne', sans-serif; font-size:18px; font-weight:800;
+  }
+  .roi-col.red .roi-total .amount { color:#ef4444; }
+  .roi-col.yellow .roi-total .amount { color:var(--gold); }
+  .roi-col.green .roi-total .amount { color:#22c55e; }
+
+  .roi-highlight {
+    padding:24px 32px;
+    background: linear-gradient(90deg, rgba(34,197,94,0.08) 0%, transparent 60%);
+    border-top:1px solid var(--border2);
+    display:flex; flex-wrap:wrap; gap:32px; align-items:center;
+  }
+
+  .roi-kpi { display:flex; flex-direction:column; }
+  .roi-kpi .kval {
+    font-family:'Syne', sans-serif; font-size:32px; font-weight:800;
+    color:#22c55e; line-height:1;
+  }
+  .roi-kpi .klbl { font-size:12px; color:var(--text-muted); margin-top:4px; }
+
+  /* ─── PRICING ─── */
+  .pricing-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+  @media(max-width:700px){ .pricing-grid{grid-template-columns:1fr;} }
+
+  .pricing-card {
+    background:var(--surface);
+    border:1px solid var(--border2);
+    border-radius:16px; overflow:hidden;
+    position:relative;
+    transition:transform 0.25s, box-shadow 0.25s;
+  }
+  .pricing-card:hover { transform:translateY(-4px); box-shadow:0 20px 50px rgba(0,0,0,0.35); }
+  .pricing-card.featured {
+    border-color:var(--gold);
+    box-shadow:0 0 0 1px rgba(232,184,75,0.3), 0 20px 60px rgba(232,184,75,0.1);
+  }
+
+  .pricing-badge {
+    background:var(--gold); color:#000;
+    font-size:10px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase;
+    padding:4px 12px; text-align:center;
+  }
+
+  .pricing-body { padding:24px; }
+  .pricing-body h3 { font-size:16px; font-weight:800; margin-bottom:4px; }
+  .pricing-body .subtitle { font-size:12px; color:var(--text-muted); margin-bottom:20px; }
+
+  .price-impl {
+    font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em;
+    margin-bottom:4px;
+  }
+  .price-impl-val {
+    font-family:'Syne', sans-serif; font-size:26px; font-weight:800;
+    margin-bottom:16px;
+  }
+  .pricing-card.featured .price-impl-val { color:var(--gold); }
+
+  .price-monthly {
+    display:flex; align-items:center; gap:8px;
+    padding:10px 14px; border-radius:10px;
+    background:var(--surface2); border:1px solid var(--border2);
+    margin-bottom:20px;
+  }
+  .price-monthly .pm-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; }
+  .price-monthly .pm-val { font-family:'Syne', sans-serif; font-size:18px; font-weight:800; margin-left:auto; }
+  .pricing-card.featured .pm-val { color:var(--gold); }
+
+  .price-delivery {
+    display:flex; align-items:center; gap:8px;
+    font-size:12px; color:var(--text-muted);
+  }
+  .price-delivery::before { content:'⏱'; }
+
+  /* ─── IMPLEMENTATION ─── */
+  .timeline { display:flex; flex-direction:column; gap:0; }
+  .tl-item {
+    display:flex; gap:24px; align-items:flex-start;
+    padding: 20px 0;
+    border-bottom:1px solid var(--border2);
+  }
+  .tl-item:last-child { border-bottom:0; }
+
+  .tl-num {
+    width:36px; height:36px; border-radius:50%;
+    background:var(--gold-dim); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne', sans-serif; font-size:14px; font-weight:800; color:var(--gold);
+    flex-shrink:0; margin-top:2px;
+  }
+
+  .tl-content h4 { font-size:15px; font-weight:700; margin-bottom:4px; }
+  .tl-content p { font-size:13px; color:var(--text-muted); }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    background: var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px; padding:48px 40px;
+    text-align:center;
+    position:relative; overflow:hidden;
+    background: linear-gradient(135deg, rgba(232,184,75,0.06) 0%, var(--surface) 50%, rgba(59,130,246,0.04) 100%);
+  }
+
+  .cta-section h2 { font-size:32px; font-weight:800; margin-bottom:12px; }
+  .cta-section p { color:var(--text-muted); margin-bottom:32px; font-size:15px; max-width:500px; margin-inline:auto; margin-bottom:32px; }
+
+  .cta-btns { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:32px; }
+
+  .btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 24px; border-radius:10px;
+    font-weight:700; font-size:14px; font-family:'Syne', sans-serif;
+    cursor:pointer; text-decoration:none; transition:all 0.2s;
+  }
+
+  .btn-primary {
+    background:var(--gold); color:#000;
+  }
+  .btn-primary:hover { background:var(--gold-light); transform:translateY(-1px); }
+
+  .btn-secondary {
+    background:transparent; color:var(--text);
+    border:1px solid var(--border2);
+  }
+  .btn-secondary:hover { border-color:var(--border); background:var(--surface2); }
+
+  .cta-info {
+    display:flex; flex-wrap:wrap; justify-content:center; gap:24px;
+    font-size:12px; color:var(--text-muted);
+  }
+  .cta-info span::before { content:'✓ '; color:var(--gold); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding:32px 24px; text-align:center; color:var(--text-muted);
+    font-size:12px; border-top:1px solid var(--border2);
+  }
+  footer strong { color:var(--text); font-family:'Syne', sans-serif; }
+
+  /* ─── DIVIDER ─── */
+  .divider { height:1px; background:var(--border2); margin: 0; }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    background: linear-gradient(90deg, rgba(232,184,75,0.06) 0%, transparent 70%);
+    border:1px solid var(--border); border-radius:12px;
+    padding:20px 24px; margin:32px 0;
+    display:flex; gap:16px; align-items:flex-start;
+  }
+  .callout-icon { font-size:24px; flex-shrink:0; }
+  .callout-text h4 { font-size:14px; font-weight:700; color:var(--gold); margin-bottom:4px; }
+  .callout-text p { font-size:13px; color:var(--text-muted); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .hero-inner > * { animation: fadeIn 0.7s ease both; }
+  .hero-inner > *:nth-child(1){animation-delay:0.1s}
+  .hero-inner > *:nth-child(2){animation-delay:0.2s}
+  .hero-inner > *:nth-child(3){animation-delay:0.3s}
+  .hero-inner > *:nth-child(4){animation-delay:0.4s}
+  .hero-inner > *:nth-child(5){animation-delay:0.5s}
+
+  /* scrollbar */
+  ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:var(--bg)} ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner page">
+    <div class="badge"><span class="badge-dot"></span> Proposta Comercial Exclusiva</div>
+    <p class="hero-label">UltraWork AI — Especialista em Agentes de IA</p>
+    <h1>Inteligência Artificial<br>para <em>Elevar</em> a AuraBrasil<br>ao Próximo Nível</h1>
+    <p class="hero-sub">
+      Dois agentes de IA de alta performance — um para inteligência comercial e outro para gestão documental — projetados especificamente para o modelo de negócio da AuraBrasil.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="label">Destinatário</span>
+        <span class="value">André — Área de Tecnologia</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Empresa</span>
+        <span class="value">AuraBrasil / Grupo LM</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Elaborado por</span>
+        <span class="value">Sandro Carlos · (31) 99180-1259</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">Data</span>
+        <span class="value">Abril / 2025</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ PERFIL ═══════════════════════════════ -->
+<section>
+  <div class="page">
+    <div class="section-header">
+      <p class="section-tag">Análise da Empresa</p>
+      <h2>Quem é a AuraBrasil?</h2>
+      <p>Levantamento de dados públicos e posicionamento de mercado para fundamentar as projeções de ROI desta proposta.</p>
+    </div>
+
+    <div class="company-panel">
+      <div class="company-header">
+        <div class="company-logo-box">AB</div>
+        <div>
+          <h3>AuraBrasil · Grupo Luiz Mendonça</h3>
+          <p>Locação de Plataformas Aéreas · Sede em Salvador, BA · Atuação Nacional</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <div class="num">12+</div>
+          <div class="lbl">Filiais no Brasil</div>
+        </div>
+        <div class="stat-cell">
+          <div class="num">20+</div>
+          <div class="lbl">Estados atendidos</div>
+        </div>
+        <div class="stat-cell">
+          <div class="num">800+</div>
+          <div class="lbl">Plataformas aéreas</div>
+        </div>
+        <div class="stat-cell">
+          <div class="num">2.500+</div>
+          <div class="lbl">Clientes B2B ativos</div>
+        </div>
+        <div class="stat-cell">
+          <div class="num">Top 3</div>
+          <div class="lbl">No segmento no Brasil</div>
+        </div>
+        <div class="stat-cell">
+          <div class="num">R$200M</div>
+          <div class="lbl">Investidos nos últimos 3 anos</div>
+        </div>
+        <div class="stat-cell">
+          <div class="num">40+</div>
+          <div class="lbl">Anos do Grupo LM</div>
+        </div>
+        <div class="stat-cell">
+          <div class="num">GPTW</div>
+          <div class="lbl">100 Melhores Empresas BR</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-icon">💡</div>
+      <div class="callout-text">
+        <h4>Por que a AuraBrasil é o ambiente ideal para Agentes de IA?</h4>
+        <p>Operação B2B complexa, documentação técnica regulatória intensa (NR35, IPAF, ART, contratos), 12 filiais gerando dados descentralizados, e um mercado competitivo que exige velocidade e inteligência comercial. Cada processo manual é uma oportunidade de automação com impacto direto no resultado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ DIAGNÓSTICO ═══════════════════════════════ -->
+<section>
+  <div class="page">
+    <div class="section-header">
+      <p class="section-tag">Diagnóstico Operacional</p>
+      <h2>O que a AuraBrasil perde<br>sem Agentes de IA hoje</h2>
+      <p>Análise dos principais gargalos identificados no modelo operacional do setor de locação de plataformas com atuação nacional e equipe distribuída.</p>
+    </div>
+
+    <div class="diag-grid">
+      <div class="diag-card">
+        <div class="diag-icon">🔍</div>
+        <div>
+          <h4>Prospecção Comercial Manual e Lenta</h4>
+          <p>Consultores de negócios das 12 filiais gastam horas pesquisando manualmente cada empresa prospectada — CNPJ, porte, histórico, contato, poder de decisão. Sem padronização nem centralização dessas informações.</p>
+          <span class="cost">Perda estimada: R$8.400/mês em horas improdutivas</span>
+        </div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-icon">📄</div>
+        <div>
+          <h4>Documentação Técnica Criada do Zero</h4>
+          <p>Contratos de locação, fichas cadastrais, documentos NR35, relatórios técnicos, laudos de manutenção e treinamento IPAF são elaborados manualmente a cada novo cliente ou equipamento — processo repetitivo e sujeito a erros.</p>
+          <span class="cost">Perda estimada: R$14.200/mês em retrabalho e horas de equipe</span>
+        </div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-icon">💼</div>
+        <div>
+          <h4>Inteligência Comercial Descentralizada</h4>
+          <p>Cada filial opera de forma independente sem visão unificada dos clientes-alvo. Oportunidades de cross-sell (ex: cliente de construção civil que pode usar plataforma industrial) são perdidas por falta de inteligência de dados.</p>
+          <span class="cost">Perda estimada: 15-25% em conversão de novas oportunidades</span>
+        </div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-icon">⚠️</div>
+        <div>
+          <h4>Riscos Regulatórios e Conformidade</h4>
+          <p>Documentos gerados manualmente estão sujeitos a inconsistências em normas técnicas (NR35, NR18, IPAF), podendo gerar multas, suspensão de contratos com grandes corporações e danos à reputação da marca.</p>
+          <span class="cost">Risco de passivo: R$20.000 a R$80.000 por autuação</span>
+        </div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-icon">⏱</div>
+        <div>
+          <h4>Tempo de Resposta ao Cliente Elevado</h4>
+          <p>Elaborar uma proposta personalizada para um grande cliente corporativo (construção civil, petroquímica, mineração) leva tempo de pesquisa, consulta a diferentes fontes e montagem manual — reduzindo a taxa de fechamento.</p>
+          <span class="cost">Impacto: atraso médio de 48-72h em propostas críticas</span>
+        </div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-icon">📊</div>
+        <div>
+          <h4>Ausência de Dossiê de Clientes Estruturado</h4>
+          <p>O segmento de atuação da AuraBrasil (grandes corporações em construção, industrial, petroquímica, mineração) exige abordagem consultiva. Sem dossiê detalhado do prospect, o consultor entra na reunião sem a inteligência necessária para fechar.</p>
+          <span class="cost">Impacto: perda de 20-30% dos negócios por abordagem sem contexto</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ AGENTES ═══════════════════════════════ -->
+<section>
+  <div class="page">
+    <div class="section-header">
+      <p class="section-tag">A Solução</p>
+      <h2>Dois Agentes de IA<br>prontos para operar na AuraBrasil</h2>
+      <p>Cada agente foi concebido para resolver uma dor específica da operação, com impacto mensurável em receita, produtividade e conformidade.</p>
+    </div>
+
+    <div class="agents-grid">
+      <!-- AGENTE 1 -->
+      <div class="agent-card gold">
+        <div class="agent-head">
+          <p class="agent-num">Agente 01</p>
+          <span class="agent-icon">🕵️</span>
+          <h3>Agente de Inteligência Comercial<br>— "Dossiê de Clientes"</h3>
+          <p>Apoia o consultor de negócios com um dossiê completo e enriquecido de cada prospect antes da abordagem.</p>
+        </div>
+        <div class="agent-body">
+          <ul class="feature-list">
+            <li>Coleta automática de dados: CNPJ, faturamento estimado, porte, sócios, filiais e setor de atuação</li>
+            <li>Análise de maturidade do prospect para locação de plataformas aéreas (histórico de obras, projetos ativos)</li>
+            <li>Mapeamento de decisores: cargo, LinkedIn, e-mail e telefone de contato validados</li>
+            <li>Detecção de oportunidades de cross-sell entre filiais da AuraBrasil</li>
+            <li>Score de prioridade por potencial de fechamento e tamanho do contrato</li>
+            <li>Resumo executivo de 1 página com insights para a reunião de vendas</li>
+            <li>Alerta de riscos: clientes com processos legais, negativação ou instabilidade financeira</li>
+            <li>Integração com CRM e WhatsApp via N8N para entrega automática ao consultor</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- AGENTE 2 -->
+      <div class="agent-card blue">
+        <div class="agent-head">
+          <p class="agent-num">Agente 02</p>
+          <span class="agent-icon">📋</span>
+          <h3>Agente de Documentação Técnica<br>— "Doc Inteligente"</h3>
+          <p>Cria, preenche e atualiza toda a documentação técnica e comercial da AuraBrasil com precisão e velocidade.</p>
+        </div>
+        <div class="agent-body">
+          <ul class="feature-list">
+            <li>Geração automática de contratos de locação personalizados por cliente, equipamento e prazo</li>
+            <li>Preenchimento inteligente de fichas cadastrais a partir do CNPJ do cliente</li>
+            <li>Criação de laudos técnicos de equipamentos com base em modelos JLG e catálogo da frota</li>
+            <li>Emissão de documentos de treinamento IPAF e NR35 com dados do operador e validade</li>
+            <li>Relatórios de manutenção e inspeção preenchidos via checklist digital pelo técnico</li>
+            <li>Alterações em documentos existentes com controle de versão e auditoria</li>
+            <li>Templates inteligentes que se adaptam ao segmento (construção, industrial, mineração)</li>
+            <li>Exportação em PDF, Word e integração direta com o sistema de gestão da empresa</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ ROI ═══════════════════════════════ -->
+<section>
+  <div class="page">
+    <div class="section-header">
+      <p class="section-tag">Retorno sobre o Investimento</p>
+      <h2>Quanto a AuraBrasil ganha<br>com os Agentes de IA</h2>
+      <p>Projeção baseada na estrutura operacional da empresa: 12 filiais, equipe comercial distribuída, 2.500+ clientes B2B e operação documental intensa.</p>
+    </div>
+
+    <div class="roi-section">
+      <div class="roi-header">
+        <p style="font-size:13px;color:var(--text-muted)">Cenário base: AuraBrasil com 18 consultores comerciais (12 filiais) + 8 pessoas em backoffice técnico-documental.</p>
+      </div>
+
+      <div class="roi-cols">
+        <!-- COLUNA: CUSTO ATUAL -->
+        <div class="roi-col red">
+          <p class="roi-col-label">💸 O que gastam hoje</p>
+          <div class="roi-item">
+            <span class="name">Horas de pesquisa de prospects (18 consultores × 3h/semana × R$35)</span>
+            <span class="val">R$8.316/mês</span>
+          </div>
+          <div class="roi-item">
+            <span class="name">Criação manual de documentos técnicos (8 funcionários × 4h/dia × R$32)</span>
+            <span class="val">R$18.176/mês</span>
+          </div>
+          <div class="roi-item">
+            <span class="name">Retrabalho por erros em documentos (média 12% do tempo documental)</span>
+            <span class="val">R$2.181/mês</span>
+          </div>
+          <div class="roi-item">
+            <span class="name">Oportunidades perdidas por atraso na entrega de propostas</span>
+            <span class="val">R$12.000/mês*</span>
+          </div>
+          <div class="roi-total">
+            <span class="label">Total de Custo/Perda</span>
+            <span class="amount">R$40.673/mês</span>
+          </div>
+        </div>
+
+        <!-- COLUNA: INVESTIMENTO -->
+        <div class="roi-col yellow">
+          <p class="roi-col-label">📊 Investimento em IA</p>
+          <div class="roi-item">
+            <span class="name">Implementação (única vez) — 2 agentes</span>
+            <span class="val">R$5.997</span>
+          </div>
+          <div class="roi-item">
+            <span class="name">Mensalidade (manutenção, evolução e suporte)</span>
+            <span class="val">R$1.997/mês</span>
+          </div>
+          <div class="roi-item">
+            <span class="name">Custo de API de IA (Claude/OpenAI — estimado)</span>
+            <span class="val">R$800/mês</span>
+          </div>
+          <div class="roi-item">
+            <span class="name">Treinamento de equipe (incluso na implantação)</span>
+            <span class="val">R$0</span>
+          </div>
+          <div class="roi-total">
+            <span class="label">Total Mensal</span>
+            <span class="amount">R$2.797/mês</span>
+          </div>
+        </div>
+
+        <!-- COLUNA: GANHO -->
+        <div class="roi-col green">
+          <p class="roi-col-label">📈 O que podem ganhar</p>
+          <div class="roi-item">
+            <span class="name">Redução de 80% do tempo de pesquisa de prospects</span>
+            <span class="val">+R$6.652/mês</span>
+          </div>
+          <div class="roi-item">
+            <span class="name">Redução de 70% do tempo em documentação técnica</span>
+            <span class="val">+R$12.723/mês</span>
+          </div>
+          <div class="roi-item">
+            <span class="name">Eliminação de retrabalho por erros documentais</span>
+            <span class="val">+R$2.181/mês</span>
+          </div>
+          <div class="roi-item">
+            <span class="name">Aumento de 20% na conversão comercial com dossiê</span>
+            <span class="val">+R$15.000/mês*</span>
+          </div>
+          <div class="roi-total">
+            <span class="label">Ganho Total</span>
+            <span class="amount">R$36.556/mês</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="roi-highlight">
+        <div class="roi-kpi">
+          <span class="kval">1.207%</span>
+          <span class="klbl">ROI Anual estimado</span>
+        </div>
+        <div class="roi-kpi">
+          <span class="kval">R$33.759</span>
+          <span class="klbl">Lucro líquido mensal com IA</span>
+        </div>
+        <div class="roi-kpi">
+          <span class="kval">26 dias</span>
+          <span class="klbl">Payback da implementação</span>
+        </div>
+        <div class="roi-kpi">
+          <span class="kval">R$405.108</span>
+          <span class="klbl">Ganho líquido no 1º ano</span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-left:auto;max-width:240px;">
+          *Estimativa conservadora baseada em ticket médio de contratos B2B e taxa de conversão típica do setor de locação de equipamentos industriais.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ PRICING ═══════════════════════════════ -->
+<section>
+  <div class="page">
+    <div class="section-header">
+      <p class="section-tag">Planos e Investimento</p>
+      <h2>Escolha o plano ideal<br>para a AuraBrasil</h2>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- PLANO 1 -->
+      <div class="pricing-card">
+        <div class="pricing-body">
+          <h3>Agente Comercial</h3>
+          <p class="subtitle">Dossiê de clientes e inteligência de prospecção</p>
+          <p class="price-impl">Implementação única</p>
+          <p class="price-impl-val">R$ 3.997</p>
+          <div class="price-monthly">
+            <div>
+              <p class="pm-label">Mensalidade</p>
+              <p class="pm-val">R$ 1.497</p>
+            </div>
+          </div>
+          <p class="price-delivery">Entrega em 10 dias úteis</p>
+        </div>
+      </div>
+
+      <!-- PLANO DESTAQUE -->
+      <div class="pricing-card featured">
+        <div class="pricing-badge">⭐ MELHOR CUSTO-BENEFÍCIO</div>
+        <div class="pricing-body">
+          <h3>Pacote Completo</h3>
+          <p class="subtitle">Agente Comercial + Agente Documental</p>
+          <p class="price-impl">Implementação única</p>
+          <p class="price-impl-val">R$ 5.997</p>
+          <div class="price-monthly">
+            <div>
+              <p class="pm-label">Mensalidade</p>
+              <p class="pm-val">R$ 1.997</p>
+            </div>
+          </div>
+          <p class="price-delivery">Entrega em 15 dias úteis</p>
+        </div>
+      </div>
+
+      <!-- PLANO 2 -->
+      <div class="pricing-card">
+        <div class="pricing-body">
+          <h3>Agente Documental</h3>
+          <p class="subtitle">Criação e gestão de documentos técnicos</p>
+          <p class="price-impl">Implementação única</p>
+          <p class="price-impl-val">R$ 3.997</p>
+          <div class="price-monthly">
+            <div>
+              <p class="pm-label">Mensalidade</p>
+              <p class="pm-val">R$ 1.497</p>
+            </div>
+          </div>
+          <p class="price-delivery">Entrega em 10 dias úteis</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:32px;">
+      <div class="callout-icon">🎯</div>
+      <div class="callout-text">
+        <h4>Recomendação Estratégica para André — Área de Tecnologia</h4>
+        <p>O Pacote Completo oferece integração total entre os dois agentes: o Dossiê Comercial alimenta automaticamente o Agente Documental para pré-preencher contratos e fichas do novo cliente, criando um fluxo de dados inteligente de ponta a ponta. É a solução que faz mais sentido para uma operação tecnológica de alta performance como a AuraBrasil.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ IMPLEMENTAÇÃO ═══════════════════════════════ -->
+<section>
+  <div class="page">
+    <div class="section-header">
+      <p class="section-tag">Processo de Implementação</p>
+      <h2>Como funciona<br>a implantação dos agentes</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-num">1</div>
+        <div class="tl-content">
+          <h4>Briefing Técnico e Mapeamento de Processos</h4>
+          <p>Reunião com a equipe de tecnologia e comercial da AuraBrasil para entender os fluxos atuais, sistemas utilizados (CRM, ERP, WhatsApp Business) e documentos mais críticos da operação. Definição dos triggers de ativação de cada agente.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">2</div>
+        <div class="tl-content">
+          <h4>Configuração dos Agentes e Integração de Dados</h4>
+          <p>Desenvolvimento dos prompts especializados para o segmento de locação de plataformas aéreas, configuração das APIs de enriquecimento de dados, e integração com os sistemas existentes via N8N ou Zapier.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">3</div>
+        <div class="tl-content">
+          <h4>Templates e Base de Conhecimento</h4>
+          <p>Carregamento dos modelos de documentos técnicos da AuraBrasil (contratos, fichas, laudos, certificados IPAF/NR35) e configuração da base de conhecimento com especificações técnicas dos equipamentos da frota.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">4</div>
+        <div class="tl-content">
+          <h4>Testes, Validação e Homologação</h4>
+          <p>Fase de testes com casos reais da AuraBrasil. Ajustes finos nos agentes conforme feedback da equipe técnica e comercial. Validação de conformidade dos documentos gerados com as normas regulatórias do setor.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">5</div>
+        <div class="tl-content">
+          <h4>Go-Live, Treinamento e Suporte Contínuo</h4>
+          <p>Publicação dos agentes em ambiente de produção, treinamento da equipe via vídeo-aulas e sessão ao vivo. Suporte técnico e evolução contínua dos agentes inclusa na mensalidade.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ CTA ═══════════════════════════════ -->
+<section>
+  <div class="page">
+    <div class="cta-section">
+      <div class="badge" style="margin:0 auto 24px;"><span class="badge-dot"></span> Próximo Passo</div>
+      <h2>Vamos implementar<br>na AuraBrasil?</h2>
+      <p>Uma conversa de 30 minutos com André é suficiente para definir o escopo exato dos agentes, validar os sistemas de integração e dar início ao processo dentro de 15 dias úteis.</p>
+      <div class="cta-btns">
+        <a class="btn btn-primary" href="https://wa.me/5531991801259?text=Ol%C3%A1%20Sandro%2C%20quero%20falar%20sobre%20os%20Agentes%20de%20IA%20para%20a%20AuraBrasil">
+          💬 Falar pelo WhatsApp
+        </a>
+        <a class="btn btn-secondary" href="tel:+5531991801259">
+          📞 (31) 99180-1259
+        </a>
+      </div>
+      <div class="cta-info">
+        <span>Implementação em até 15 dias úteis</span>
+        <span>Suporte contínuo incluso</span>
+        <span>Integração com sistemas existentes</span>
+        <span>ROI garantido em 30 dias</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <strong>UltraWork AI</strong> · Sandro Carlos — Especialista em IA Aplicada a Negócios<br>
+  <span style="margin-top:4px;display:block">(31) 99180-1259 · Belo Horizonte, MG · Proposta elaborada exclusivamente para AuraBrasil / André — Área de Tecnologia</span>
+</footer>
+
+</body>
+</html>
