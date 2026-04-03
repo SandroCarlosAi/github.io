@@ -1,4 +1,4 @@
-# TRANSFORMAÇÃO OPERACIONAL COM AGENTES DE IA
+# TRANSFORMAÇÃO OPERACIONAL COM AGENTES DE IA 
 Sandro Carlos Especislista em IA Aplicada a Negócios e Agentes de IA
 <!DOCTYPE html>
 <html lang="pt-BR">
