@@ -462,7 +462,7 @@
   <div class="hero-grid"></div>
   <div class="hero-inner page">
     <div class="badge"><span class="badge-dot"></span> Proposta Comercial Exclusiva</div>
-    <p class="hero-label">UltraWork AI — Especialista em Agentes de IA</p>
+    <p class="hero-label">Sandro Carlos AI — Especialista em IA Aplicada a Negócios e Agentes de IA</p>
     <h1>Inteligência Artificial<br>para <em>Elevar</em> a AuraBrasil<br>ao Próximo Nível</h1>
     <p class="hero-sub">
       Dois agentes de IA de alta performance — um para inteligência comercial e outro para gestão documental — projetados especificamente para o modelo de negócio da AuraBrasil.
