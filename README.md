@@ -46,7 +46,7 @@
   }
 
   /* ─── LAYOUT ─── */
-  .page { max-width: 960px; margin: 0 auto; padding: 0 24px; position:relative; z-index:1; }
+  .page { max-width: 1600px; margin: 0 auto; padding: 0 40px; position:relative; z-index:1; }
 
   h1,h2,h3,h4 { font-family:'Syne', sans-serif; }
 
@@ -743,7 +743,7 @@
 
         <!-- COLUNA: GANHO -->
         <div class="roi-col green">
-          <p class="roi-col-label">📈 O que podem ganhar</p>
+          <p class="roi-col-label">📈 O que podem lucrar</p>
           <div class="roi-item">
             <span class="name">Redução de 80% do tempo de pesquisa de prospects</span>
             <span class="val">+R$6.652/mês</span>
