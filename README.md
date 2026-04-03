@@ -484,7 +484,7 @@ Sandro Carlos Especislista em IA Aplicada a Negócios e Agentes de IA
       </div>
       <div class="hero-meta-item">
         <span class="label">Data</span>
-        <span class="value">Abril / 2025</span>
+        <span class="value">Abril / 2026</span>
       </div>
     </div>
   </div>
